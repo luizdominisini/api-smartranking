@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import JogadorModule from './models/jogador/jogador.module';
-
+import { MongooseModule } from '@nestjs/mongoose';
 @Module({
-  imports: [JogadorModule],
+  imports: [MongooseModule.forRoot(), JogadorModule],
   controllers: [],
   providers: [],
 })

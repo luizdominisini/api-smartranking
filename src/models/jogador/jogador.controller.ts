@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import CriarJogadorDto from './dtos/criar-jogador.dto';
 import JogadorService from './jogador.service';
 
@@ -7,12 +15,25 @@ export default class JogadorController {
   constructor(private readonly jogadorService: JogadorService) {}
 
   @Post()
-  async criarAtualizarJogador(@Body() dados: CriarJogadorDto) {
-    return this.jogadorService.criarAtualizarJogador(dados);
+  async criarJogador(@Body() dados: CriarJogadorDto) {
+    return this.jogadorService.criarJogador(dados);
   }
 
-  @Get()
-  async listarJogadores() {
-    return this.jogadorService.listarJogadores();
+  @Get(':email?')
+  async consultaJogadores(@Param('email') email: string) {
+    return this.jogadorService.consultaJogadores(email);
+  }
+
+  @Put(':email')
+  async atualizarJogador(
+    @Param('email') email: string,
+    @Body('nome') nome: string,
+  ) {
+    return this.jogadorService.atualizarJogador(email, nome);
+  }
+
+  @Delete(':email')
+  async deletarJogador(@Param('email') email: string) {
+    return this.jogadorService.deletarJogador(email);
   }
 }
