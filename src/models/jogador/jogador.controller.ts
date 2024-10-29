@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import CriarJogadorDto from './dtos/criar-jogador.dto';
 import JogadorService from './jogador.service';
+import { JogadorValicaoPipe } from './pipes/jogador-validacao.pipe';
 
 @Controller('api/v1/jogador')
 export default class JogadorController {
@@ -19,21 +20,21 @@ export default class JogadorController {
     return this.jogadorService.criarJogador(dados);
   }
 
-  @Get(':email?')
-  async consultaJogadores(@Param('email') email: string) {
-    return this.jogadorService.consultaJogadores(email);
+  @Get(':_id?')
+  async consultaJogadores(@Param('_id') _id: string) {
+    return this.jogadorService.consultaJogadores(_id);
   }
 
-  @Put(':email')
+  @Put(':_id')
   async atualizarJogador(
-    @Param('email') email: string,
+    @Param('_id') _id: string,
     @Body('nome') nome: string,
   ) {
-    return this.jogadorService.atualizarJogador(email, nome);
+    return this.jogadorService.atualizarJogador(_id, nome);
   }
 
-  @Delete(':email')
-  async deletarJogador(@Param('email') email: string) {
-    return this.jogadorService.deletarJogador(email);
+  @Delete(':_id')
+  async deletarJogador(@Param('_id', JogadorValicaoPipe) _id: string) {
+    return this.jogadorService.deletarJogador(_id);
   }
 }

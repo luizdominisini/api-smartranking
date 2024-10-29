@@ -1,5 +1,4 @@
-export default interface JogadorInterface {
-  readonly _id: string;
+export default interface JogadorInterface extends Document {
   telefoneNumero: string;
   email: string;
   nome: string;
