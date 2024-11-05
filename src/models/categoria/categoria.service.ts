@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import JogadorService from '../jogador/jogador.service';
 import AtualizarCategoriaDto from './dtos/atualizar-categoria.dto';
 import CriarCategoriaDto from './dtos/criar-categoria.dto';
 import CategoriaInterface from './interfaces/categoria.interface';
@@ -14,6 +15,8 @@ export default class CategoriaService {
   constructor(
     @InjectModel('Categoria')
     private readonly categoriaModel: Model<CategoriaInterface>,
+
+    private readonly jogadorService: JogadorService,
   ) {}
 
   async criarCategoria({
@@ -43,10 +46,7 @@ export default class CategoriaService {
   }
 
   async consultaCategoria(): Promise<CategoriaInterface[]> {
-    return this.categoriaModel
-      .find()
-      .populate('jogador', { strictPopulate: false })
-      .exec();
+    return this.categoriaModel.find().populate('jogadores').exec();
   }
 
   async consultaCategoriaPeloId(
@@ -106,6 +106,22 @@ export default class CategoriaService {
       throw new NotFoundException('Categoria não encontrada na base de dados.');
     }
 
+    const jogadorJaCadastradoEmCategoria = await this.categoriaModel
+      .find({
+        categoria,
+      })
+      .where('jogadores')
+      .in(_id);
+
+    if (jogadorJaCadastradoEmCategoria.length > 0) {
+      throw new BadRequestException('Jogador já cadastrado em uma Categoria.');
+    }
+
+    const jogadorEncontrado = await this.jogadorService.buscarJogadorPorID(_id);
+
+    if (!jogadorEncontrado) {
+      throw new NotFoundException('Jogador não encontrada na base de dados.');
+    }
     categoriaEncontrada.jogadores.push(_id);
     await this.categoriaModel
       .findOneAndUpdate({ categoria }, { $set: categoriaEncontrada })

@@ -7,9 +7,9 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { JogadorValicaoPipe } from '../../common/pipes/validacao.pipe';
 import CriarJogadorDto from './dtos/criar-jogador.dto';
 import JogadorService from './jogador.service';
-import { JogadorValicaoPipe } from './pipes/jogador-validacao.pipe';
 
 @Controller('api/v1/jogador')
 export default class JogadorController {

@@ -87,7 +87,7 @@ export default class JogadorService {
     return;
   }
 
-  private async buscarJogadorPorID(_id: string): Promise<JogadorInterface> {
+  async buscarJogadorPorID(_id: string): Promise<JogadorInterface> {
     try {
       const jogador = await this.jogadorModel.findOne({ _id });
       return jogador;

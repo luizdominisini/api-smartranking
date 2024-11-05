@@ -8,7 +8,7 @@ export const CategoriaSchema = new mongoose.Schema(
     jogadores: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'jogador',
+        ref: 'Jogador',
       },
     ],
   },
